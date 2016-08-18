@@ -10,19 +10,20 @@ class Credentials:
         self.admin_email = "six.testemail@gmail.com"
         self.admin_pass = "@dmin@123"
 
+
 class CreateContents(unittest.TestCase):
-    def setUp(self):
-        self.driver = webdriver.Chrome()
-        self.driver.maximize_window()
-        self.base_url = "http://localhost/drupal7/"
+    @classmethod
+    def setUpClass(cls):
+        cls.driver = webdriver.Chrome()
+        cls.driver.maximize_window()
+        cls.base_url = "http://localhost/drupal7/"
         # self.driver.get('http://localhost/drupal7/user')
-        self.credentials = Credentials()
+        cls.credentials = Credentials()
 
     def test_login(self):
         driver = self.driver
         login_page = "user"
         driver.get(self.base_url + login_page)
-
 
         user_name_field = driver.find_element_by_id("edit-name")
         pass_field = driver.find_element_by_id("edit-pass")
@@ -42,8 +43,9 @@ class CreateContents(unittest.TestCase):
 
 
 
-    # def tearDown(self):
-    #     self.driver.quit()
+
+        # def tearDown(self):
+        #     self.driver.quit()
 
 
 if __name__ == '__main__':
