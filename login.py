@@ -1,5 +1,6 @@
 import credentials as credentials
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.select import Select
 import unittest
@@ -9,6 +10,7 @@ class Credentials:
     def __init__(self):
         self.admin_email = "six.testemail@gmail.com"
         self.admin_pass = "@dmin@123"
+
 
 
 class CreateContents(unittest.TestCase):
@@ -35,12 +37,17 @@ class CreateContents(unittest.TestCase):
         pass_field.clear()
         pass_field.send_keys(self.credentials.admin_pass)
         login_button.click()
-        self.driver.implicitly_wait(40)
+        # self.driver.implicitly_wait(40)
 
     def test_verify_login(self):
         driver = self.driver
         logout_link = driver.find_element_by_link_text("Log out")
 
+    def is_element_present(self, how, what):
+        try: self.driver.find_element(by.link_text, "Log out")
+        except NoSuchElementException as e: return False
+        return True
+        # self.assertTrue(self.is_element_present(By.LINK_TEXT, "My link"))
 
 
 
