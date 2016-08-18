@@ -8,8 +8,8 @@ import unittest
 
 class Credentials:
     def __init__(self):
-        self.admin_email = "six.testemail@gmail.com"
-        self.admin_pass = "@dmin@123"
+        self.admin_email = "example@email.com"
+        self.admin_pass = "password"
 
 
 
