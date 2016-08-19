@@ -1,6 +1,5 @@
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
-from selenium.webdriver.common import by
 from selenium.webdriver.common.by import By
 from __builtin__ import classmethod
 from selenium.webdriver.support.ui import WebDriverWait
@@ -21,8 +20,6 @@ class CreateContents(unittest.TestCase):
     username = Conf_Reader.get_value(credentials_file,'LOGIN_USER')
     password = Conf_Reader.get_value(credentials_file,'LOGIN_PASSWORD')
 
-    # def go_to_login(self):
-    #     self.driver.get(self.base_url + "user")
 
     #Decleared is_element_present method
     def is_element_present(self, how, what):
@@ -42,7 +39,6 @@ class CreateContents(unittest.TestCase):
         self.assertTrue(self.is_element_present(By.XPATH, "//input[contains(@id, 'edit-pass')]"))
         self.assertTrue(self.is_element_present(By.XPATH, "//input[contains(@value, 'Log in')]"))
         print "is_element_present is working"
-        # self.login_as_user()
 
     def login_as_user(self):
         user_field_xpath = "//input[contains(@id, 'edit-name')]"
@@ -57,12 +53,22 @@ class CreateContents(unittest.TestCase):
         self.driver.find_element_by_xpath(login_button_xpath).click()
         print "user name entered successfully!!"
 
+    def verify_login_success(self):
+        self.assertTrue(self.is_element_present(By.XPATH, "//a[contains(text(), 'Log out')]"))
+        print "Login successful verified"
+
+
+
+
+
+
+
 
     #Run all the test cases
     def test_login(self):
-        # self.go_to_login()
         self.verify_login_page()
         self.login_as_user()
+        self.verify_login_success()
 
     @classmethod
     def tearDown(cls):
