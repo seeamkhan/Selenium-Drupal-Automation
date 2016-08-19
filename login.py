@@ -1,15 +1,17 @@
-import credentials as credentials
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common import by
+from selenium.webdriver.common.by import By
+from __builtin__ import classmethod
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.select import Select
 import unittest
 
-
+#User credentials class, this should be kept in another file with encryption.
 class Credentials:
     def __init__(self):
-        self.admin_email = "example@email.com"
-        self.admin_pass = "password"
+        self.admin_email = "six.testemail@gmail.com"
+        self.admin_pass = "@dmin@123"
 
 
 
@@ -22,11 +24,19 @@ class CreateContents(unittest.TestCase):
         # self.driver.get('http://localhost/drupal7/user')
         cls.credentials = Credentials()
 
-    def test_login(self):
+    def test_go_to_login(self):
         driver = self.driver
         login_page = "user"
         driver.get(self.base_url + login_page)
+        
+    def test_login_field(self):
 
+        #check login elements exist in the Login page
+        self.assertTrue(self.is_element_present(By.ID,"edit-name"))
+        #print "is_element_present is working!! :D"
+
+    def test_login(self):
+        driver = self.driver
         user_name_field = driver.find_element_by_id("edit-name")
         pass_field = driver.find_element_by_id("edit-pass")
         login_button = driver.find_element_by_id("edit-submit")
@@ -41,19 +51,29 @@ class CreateContents(unittest.TestCase):
 
     def test_verify_login(self):
         driver = self.driver
-        logout_link = driver.find_element_by_link_text("Log out")
+        try:
+            logout_link = driver.find_element_by_xpath(".//*[@id='admin-menu-account']/li[1]/a")
+            print logout_link
+        except NoSuchElementException:
+            print "exception"
 
-    def is_element_present(self, how, what):
-        try: self.driver.find_element(by.link_text, "Log out")
-        except NoSuchElementException as e: return False
-        return True
-        # self.assertTrue(self.is_element_present(By.LINK_TEXT, "My link"))
 
 
 
         # def tearDown(self):
         #     self.driver.quit()
 
+    def is_element_present(self, how, what):
+        """
+        Utility method to check presence of an element on page
+        :param self:
+        :param how: By locator type
+        :param what: locator value
+        :return:
+        """
+        try: self.driver.find_element(by=how, value=what)
+        except NoSuchElementException, e: return False
+        return True
 
 if __name__ == '__main__':
     unittest.main()
