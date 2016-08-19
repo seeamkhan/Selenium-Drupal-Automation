@@ -14,14 +14,15 @@ class CreateContents(unittest.TestCase):
         cls.driver = webdriver.Chrome()
         # cls.driver.maximize_window()
         cls.base_url = "http://localhost/drupal7/"
+        cls.driver.get(cls.base_url + "user")
 
-    #Get the test account credentials from the .credentials file
+    # Get the test account credentials from the .credentials file
     credentials_file = os.path.join(os.path.dirname(__file__),'login.credentials')
     username = Conf_Reader.get_value(credentials_file,'LOGIN_USER')
     password = Conf_Reader.get_value(credentials_file,'LOGIN_PASSWORD')
 
-    def test_go_to_login(self):
-        self.driver.get(self.base_url + "user")
+    # def go_to_login(self):
+    #     self.driver.get(self.base_url + "user")
 
     #Decleared is_element_present method
     def is_element_present(self, how, what):
@@ -34,14 +35,16 @@ class CreateContents(unittest.TestCase):
         except NoSuchElementException, e: return False
         return True
 
+
     #Verify Login was successful.
-    def test_verify_login_page(self):
+    def verify_login_page(self):
         self.assertTrue(self.is_element_present(By.XPATH, "//input[contains(@id, 'edit-name')]"))
         self.assertTrue(self.is_element_present(By.XPATH, "//input[contains(@id, 'edit-pass')]"))
         self.assertTrue(self.is_element_present(By.XPATH, "//input[contains(@value, 'Log in')]"))
-        # print "is_element_present is working"
+        print "is_element_present is working"
+        # self.login_as_user()
 
-    def test_login_as_user(self):
+    def login_as_user(self):
         user_field_xpath = "//input[contains(@id, 'edit-name')]"
         pass_field_xpath = "//input[contains(@id, 'edit-pass')]"
         login_button_xpath = "//input[contains(@value, 'Log in')]"
@@ -55,13 +58,16 @@ class CreateContents(unittest.TestCase):
         print "user name entered successfully!!"
 
 
+    #Run all the test cases
+    def test_login(self):
+        # self.go_to_login()
+        self.verify_login_page()
+        self.login_as_user()
 
-
-
-
-
-
-
+    @classmethod
+    def tearDown(cls):
+        # Close the browser window
+        cls.driver.quit()
 
 
 if __name__ == '__main__':
