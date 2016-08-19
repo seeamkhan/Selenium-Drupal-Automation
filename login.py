@@ -6,74 +6,63 @@ from __builtin__ import classmethod
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.select import Select
 import unittest
-
-#User credentials class, this should be kept in another file with encryption.
-class Credentials:
-    def __init__(self):
-        self.admin_email = "six.testemail@gmail.com"
-        self.admin_pass = "@dmin@123"
-
-
+import os,Conf_Reader
 
 class CreateContents(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.driver = webdriver.Chrome()
-        cls.driver.maximize_window()
+        # cls.driver.maximize_window()
         cls.base_url = "http://localhost/drupal7/"
-        # self.driver.get('http://localhost/drupal7/user')
-        cls.credentials = Credentials()
+
+    #Get the test account credentials from the .credentials file
+    credentials_file = os.path.join(os.path.dirname(__file__),'login.credentials')
+    username = Conf_Reader.get_value(credentials_file,'LOGIN_USER')
+    password = Conf_Reader.get_value(credentials_file,'LOGIN_PASSWORD')
 
     def test_go_to_login(self):
-        driver = self.driver
-        login_page = "user"
-        driver.get(self.base_url + login_page)
-        
-    def test_login_field(self):
+        self.driver.get(self.base_url + "user")
 
-        #check login elements exist in the Login page
-        self.assertTrue(self.is_element_present(By.ID,"edit-name"))
-        #print "is_element_present is working!! :D"
-
-    def test_login(self):
-        driver = self.driver
-        user_name_field = driver.find_element_by_id("edit-name")
-        pass_field = driver.find_element_by_id("edit-pass")
-        login_button = driver.find_element_by_id("edit-submit")
-
-        # Login process:
-        user_name_field.clear()
-        user_name_field.send_keys(self.credentials.admin_email)
-        pass_field.clear()
-        pass_field.send_keys(self.credentials.admin_pass)
-        login_button.click()
-        # self.driver.implicitly_wait(40)
-
-    def test_verify_login(self):
-        driver = self.driver
-        try:
-            logout_link = driver.find_element_by_xpath(".//*[@id='admin-menu-account']/li[1]/a")
-            print logout_link
-        except NoSuchElementException:
-            print "exception"
-
-
-
-
-        # def tearDown(self):
-        #     self.driver.quit()
-
+    #Decleared is_element_present method
     def is_element_present(self, how, what):
         """
         Utility method to check presence of an element on page
-        :param self:
         :param how: By locator type
         :param what: locator value
-        :return:
         """
         try: self.driver.find_element(by=how, value=what)
         except NoSuchElementException, e: return False
         return True
+
+    #Verify Login was successful.
+    def test_verify_login_page(self):
+        self.assertTrue(self.is_element_present(By.XPATH, "//input[contains(@id, 'edit-name')]"))
+        self.assertTrue(self.is_element_present(By.XPATH, "//input[contains(@id, 'edit-pass')]"))
+        self.assertTrue(self.is_element_present(By.XPATH, "//input[contains(@value, 'Log in')]"))
+        # print "is_element_present is working"
+
+    def test_login_as_user(self):
+        user_field_xpath = "//input[contains(@id, 'edit-name')]"
+        pass_field_xpath = "//input[contains(@id, 'edit-pass')]"
+        login_button_xpath = "//input[contains(@value, 'Log in')]"
+
+    #Login Process
+        self.driver.find_element_by_xpath(user_field_xpath).clear()
+        self.driver.find_element_by_xpath(user_field_xpath).send_keys(self.username)
+        self.driver.find_element_by_xpath(pass_field_xpath).clear()
+        self.driver.find_element_by_xpath(pass_field_xpath).send_keys(self.password)
+        self.driver.find_element_by_xpath(login_button_xpath).click()
+        print "user name entered successfully!!"
+
+
+
+
+
+
+
+
+
+
 
 if __name__ == '__main__':
     unittest.main()
