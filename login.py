@@ -1,4 +1,4 @@
-#Druapl default feature testing
+#Druapl default features testing
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
