@@ -3,6 +3,7 @@ A simple conf reader.
 For now, we just use dotenv and return a key.
 """
 
+
 import dotenv,os
 
 def get_value(conf,key):
