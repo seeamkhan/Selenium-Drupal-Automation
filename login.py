@@ -8,7 +8,7 @@ import unittest, time, re
 import os, Conf_Reader
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
-#this is changed from home desktop
+
 
 class CreateContents(unittest.TestCase):
     @classmethod
