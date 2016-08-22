@@ -93,7 +93,7 @@ class CreateContents(unittest.TestCase):
 
 
         #Wait for the CKEditor iframe to load and switch to iframe
-        time.sleep(3)
+        time.sleep(1)
         basic_page_body_xpath = "//div[contains(@id, 'cke_2_contents')]/iframe"
         self.assertTrue(self.is_element_present(By.XPATH, basic_page_body_xpath))
         # self.driver.switch_to_frame(self.driver.find_element_by_tag_name("iframe"))
@@ -109,19 +109,28 @@ class CreateContents(unittest.TestCase):
 
         # if driver is already inside ckeditor_frame, switch out first
         self.driver.switch_to.default_content()
-        main_site_content_xpath = "//a[contains(@class, 'link-edit-summary')]"
-        self.assertTrue(self.is_element_present(By.XPATH, main_site_content_xpath))
-        self.driver.find_element_by_xpath(main_site_content_xpath).click()
-        # print "CKEditor works!!"
+
+        # Image upload
+        image_upload_button_xpath = "//a[contains(@id, 'cke_82')]//span[contains(@class, 'cke_button_icon cke_button__image_icon')]"
+        browse_button_xpath = "//span[contains(@id, 'cke_142_label')]"
+        self.driver.find_element_by_xpath(image_upload_button_xpath).click()
+        time.sleep(2)
+        self.driver.find_element_by_xpath(browse_button_xpath).click()
+
+        # main_site_content_xpath = "//a[contains(@class, 'link-edit-summary')]"
+        # self.assertTrue(self.is_element_present(By.XPATH, main_site_content_xpath))
+        # self.driver.find_element_by_xpath(main_site_content_xpath).click()
+
+        print "CKEditor works!!"
 
         # Save the Basic Page
-        self.driver.find_element_by_xpath(self.save_content_button_xpath).click()
+        # self.driver.find_element_by_xpath(self.save_content_button_xpath).click()
 
         # Verify successful Basic Page creation
-        test_page_title_xpath = "//h1[contains(text(), 'Test Basic Page')]"
-        # self.assertTrue(self.is_element_present(By.XPATH, self.success_message_xpath))
-        self.assertTrue(self.is_element_present(By.XPATH, test_page_title_xpath))
-        print "Basic Page creation success!!"
+        # test_page_title_xpath = "//h1[contains(text(), 'Test Basic Page')]"
+        # # self.assertTrue(self.is_element_present(By.XPATH, self.success_message_xpath))
+        # self.assertTrue(self.is_element_present(By.XPATH, test_page_title_xpath))
+        # print "Basic Page creation success!!"
 
 
 
