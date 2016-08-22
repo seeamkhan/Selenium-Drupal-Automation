@@ -16,8 +16,8 @@ class CreateContents(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.driver = webdriver.Chrome()
-        # cls.driver.maximize_window()
-        cls.base_url = "https://stevieawards.dev.lin2.panth.com/"
+        cls.driver.maximize_window()
+        cls.base_url = "http://stevieawards.dev.lin2.panth.com/"
         cls.driver.get(cls.base_url + "user")
 
         # Drupal common xpath:
