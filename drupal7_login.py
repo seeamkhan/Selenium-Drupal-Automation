@@ -110,12 +110,28 @@ class CreateContents(unittest.TestCase):
         # if driver is already inside ckeditor_frame, switch out first
         self.driver.switch_to.default_content()
 
+
+    def ckeditor_image_upload(self):
         # Image upload
         image_upload_button_xpath = "//a[contains(@id, 'cke_82')]//span[contains(@class, 'cke_button_icon cke_button__image_icon')]"
         browse_button_xpath = "//span[contains(@id, 'cke_142_label')]"
         self.driver.find_element_by_xpath(image_upload_button_xpath).click()
         time.sleep(2)
         self.driver.find_element_by_xpath(browse_button_xpath).click()
+
+        #window handle
+        #print current window title
+        print self.driver.title
+        #Switch to image upload
+        self.driver.switch_to.window(self.driver.window_handles[1])
+        print self.driver.title
+
+
+        self.driver.switch_to.window(self.driver.window_handles[0])
+        print self.driver.title
+
+
+
 
         # main_site_content_xpath = "//a[contains(@class, 'link-edit-summary')]"
         # self.assertTrue(self.is_element_present(By.XPATH, main_site_content_xpath))
@@ -144,6 +160,7 @@ class CreateContents(unittest.TestCase):
         self.login_as_user()
         self.verify_login_success()
         self.admin_hover_menu()
+        self.ckeditor_image_upload()
 
 
     # @classmethod
