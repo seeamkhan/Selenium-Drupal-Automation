@@ -93,10 +93,12 @@ class CreateContents(unittest.TestCase):
 
 
         #Wait for the CKEditor iframe to load and switch to iframe
-        time.sleep(1)
         basic_page_body_xpath = "//div[contains(@id, 'cke_2_contents')]/iframe"
-        self.assertTrue(self.is_element_present(By.XPATH, basic_page_body_xpath))
-        # self.driver.switch_to_frame(self.driver.find_element_by_tag_name("iframe"))
+        try:
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, basic_page_body_xpath)))
+        finally:
+            self.assertTrue(self.is_element_present(By.XPATH, basic_page_body_xpath))
+
         #Locate the iframes
         ckeditor_frame = self.driver.find_element_by_xpath(basic_page_body_xpath)
 
@@ -116,28 +118,49 @@ class CreateContents(unittest.TestCase):
         image_upload_button_xpath = "//a[contains(@id, 'cke_82')]//span[contains(@class, 'cke_button_icon cke_button__image_icon')]"
         browse_button_xpath = "//span[contains(@id, 'cke_142_label')]"
         self.driver.find_element_by_xpath(image_upload_button_xpath).click()
-        time.sleep(2)
-        self.driver.find_element_by_xpath(browse_button_xpath).click()
+        try:
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, browse_button_xpath)))
+        finally:
+            self.driver.find_element_by_xpath(browse_button_xpath).click()
 
         #window handle
         #print current window title
         print self.driver.title
-        #Switch to image upload
+        #Switch to image upload window
         self.driver.switch_to.window(self.driver.window_handles[1])
         print self.driver.title
+        upload_button_xpath = "//span[contains(text(), 'Upload')]"
+        self.driver.find_element_by_xpath(upload_button_xpath).click()
+        upload_box_xpath = "//div[contains(@id, 'op-content-upload')]"
+        choose_file_xpath = "//input[contains(@id, 'edit-imce')]"
+        imce_upload_button_xpath = "//input[contains(@id, 'edit-upload')]"
+
+        try:
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located( (By.XPATH, upload_box_xpath)) )
+        except NoSuchElementException:
+            return False
+        finally:
+            file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_files', 'business.pdf')
+            # print file_path
+            self.driver.find_element_by_xpath(choose_file_xpath).send_keys(file_path)
+        self.driver.find_element_by_xpath(imce_upload_button_xpath).click()
+        # self.driver.save_screenshot('file_upload_screenshot.png')
+
+        row_count = len(self.driver.find_elements_by_xpath("//table[@id='file-list']/tbody/tr"))
+        print row_count
 
 
-        self.driver.switch_to.window(self.driver.window_handles[0])
-        print self.driver.title
 
 
 
+        # self.driver.switch_to.window(self.driver.window_handles[0])
+        # print self.driver.title
 
         # main_site_content_xpath = "//a[contains(@class, 'link-edit-summary')]"
         # self.assertTrue(self.is_element_present(By.XPATH, main_site_content_xpath))
         # self.driver.find_element_by_xpath(main_site_content_xpath).click()
 
-        print "CKEditor works!!"
+        # print "CKEditor works!!"
 
         # Save the Basic Page
         # self.driver.find_element_by_xpath(self.save_content_button_xpath).click()
