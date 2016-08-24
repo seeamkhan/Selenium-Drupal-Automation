@@ -125,10 +125,10 @@ class CreateContents(unittest.TestCase):
 
         #window handle
         #print current window title
-        print self.driver.title
+        print ("Switched to " + self.driver.title + "window")
         #Switch to image upload window
         self.driver.switch_to.window(self.driver.window_handles[1])
-        print self.driver.title
+        print ("Switched to " + self.driver.title + "window")
         upload_button_xpath = "//span[contains(text(), 'Upload')]"
         self.driver.find_element_by_xpath(upload_button_xpath).click()
         upload_box_xpath = "//div[contains(@id, 'op-content-upload')]"
