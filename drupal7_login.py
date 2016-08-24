@@ -198,10 +198,10 @@ class CreateContents(unittest.TestCase):
         self.ckeditor_image_upload()
 
 
-    # @classmethod
-    # def tearDown(cls):
-    #     # Close the browser window
-    #     cls.driver.quit()
+    @classmethod
+    def tearDown(cls):
+        # Close the browser window
+        cls.driver.quit()
 
 
 if __name__ == '__main__':
