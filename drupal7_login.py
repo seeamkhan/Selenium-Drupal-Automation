@@ -19,7 +19,7 @@ class CreateContents(unittest.TestCase):
     def setUpClass(cls):
         cls.driver = webdriver.Chrome()
         cls.driver.maximize_window()
-        cls.base_url = "http://localhost/drupal7/"
+        cls.base_url = "http://seeam.com/drupal7/"
         cls.driver.get(cls.base_url + "user")
 
     # Drupal common xpath:
@@ -118,6 +118,7 @@ class CreateContents(unittest.TestCase):
         image_upload_button_xpath = "//a[contains(@id, 'cke_82')]//span[contains(@class, 'cke_button_icon cke_button__image_icon')]"
         browse_button_xpath = "//span[contains(@id, 'cke_142_label')]"
         self.driver.find_element_by_xpath(image_upload_button_xpath).click()
+        time.sleep(1)
         try:
             WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, browse_button_xpath)))
         finally:
@@ -152,8 +153,9 @@ class CreateContents(unittest.TestCase):
         print row_count
         last_file_xpath = "//table[@id='file-list']/tbody/tr[" + row_count + "]/td/span"
         print last_file_xpath
-        self.driver.find_element_by_xpath(last_file_xpath).click()
+        # self.driver.find_element_by_xpath(last_file_xpath).click()
         insert_file_xpath = "//span[contains(text(), 'Insert file')]"
+        time.sleep(2)
         try:
             WebDriverWait(self.driver, 10).until(EC.presence_of_element_located( (By.XPATH, insert_file_xpath)) )
         except NoSuchElementException:
@@ -173,13 +175,13 @@ class CreateContents(unittest.TestCase):
         # print "CKEditor works!!"
 
         # Save the Basic Page
-        # self.driver.find_element_by_xpath(self.save_content_button_xpath).click()
+        self.driver.find_element_by_xpath(self.save_content_button_xpath).click()
 
         # Verify successful Basic Page creation
-        # test_page_title_xpath = "//h1[contains(text(), 'Test Basic Page')]"
-        # # self.assertTrue(self.is_element_present(By.XPATH, self.success_message_xpath))
-        # self.assertTrue(self.is_element_present(By.XPATH, test_page_title_xpath))
-        # print "Basic Page creation success!!"
+        test_page_title_xpath = "//h1[contains(text(), 'Test Basic Page')]"
+        # self.assertTrue(self.is_element_present(By.XPATH, self.success_message_xpath))
+        self.assertTrue(self.is_element_present(By.XPATH, test_page_title_xpath))
+        print "Basic Page creation success!!"
 
 
 
