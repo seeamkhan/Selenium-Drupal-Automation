@@ -144,17 +144,27 @@ class CreateContents(unittest.TestCase):
             # print file_path
             self.driver.find_element_by_xpath(choose_file_xpath).send_keys(file_path)
         self.driver.find_element_by_xpath(imce_upload_button_xpath).click()
+        time.sleep(3)
         # self.driver.save_screenshot('file_upload_screenshot.png')
 
-        row_count = len(self.driver.find_elements_by_xpath("//table[@id='file-list']/tbody/tr"))
+        row_count_int = len(self.driver.find_elements_by_xpath("//table[@id='file-list']/tbody/tr"))
+        row_count = str(row_count_int)
         print row_count
+        last_file_xpath = "//table[@id='file-list']/tbody/tr[" + row_count + "]/td/span"
+        print last_file_xpath
+        self.driver.find_element_by_xpath(last_file_xpath).click()
+        insert_file_xpath = "//span[contains(text(), 'Insert file')]"
+        try:
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located( (By.XPATH, insert_file_xpath)) )
+        except NoSuchElementException:
+            return False
+        finally:
+            self.driver.find_element_by_xpath(insert_file_xpath).click()
 
-
-
-
-
-        # self.driver.switch_to.window(self.driver.window_handles[0])
-        # print self.driver.title
+        self.driver.switch_to.window(self.driver.window_handles[0])
+        print self.driver.title
+        ckeditor_ok_button_xpath = "//span[contains(text(), 'OK')]"
+        self.driver.find_element_by_xpath(ckeditor_ok_button_xpath).click()
 
         # main_site_content_xpath = "//a[contains(@class, 'link-edit-summary')]"
         # self.assertTrue(self.is_element_present(By.XPATH, main_site_content_xpath))
