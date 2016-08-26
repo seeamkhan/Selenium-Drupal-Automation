@@ -19,7 +19,7 @@ class CreateContents(unittest.TestCase):
     def setUpClass(cls):
         cls.driver = webdriver.Chrome()
         cls.driver.maximize_window()
-        cls.base_url = "http://seeam.com/drupal7/"
+        cls.base_url = "http://localhost/drupal7/"
         cls.driver.get(cls.base_url + "user")
 
     # Drupal common xpath:
@@ -28,7 +28,7 @@ class CreateContents(unittest.TestCase):
         cls.add_basic_page_xpath = "//ul[contains(@id, 'admin-menu-menu')]/li[2]/ul/li[1]/ul/li[2]/a"
         cls.user_field_xpath = "//input[contains(@id, 'edit-name')]"
         cls.pass_field_xpath = "//input[contains(@id, 'edit-pass')]"
-        cls.login_button_xpath = "//input[contains(@value, 'Log in')]"
+        cls.login_button_xpath = "//button[contains(@value, 'Log in')]"
         cls.logout_link_xpath = "//a[contains(text(), 'Log out')]"
         cls.basic_page_title_xpath = "//h1[contains(text(), 'Create Basic page')]"
         cls.save_content_button_xpath = "//input[contains(@value, 'Save')]"

@@ -1,4 +1,5 @@
 .idea
 login.credentials
 Conf_Reader.pyc
-login2.py
+general_test.py
+setup.py
