@@ -17,18 +17,31 @@ def minion(str):
 
     all_words = []
     for count in xrange(total_char):
-        # temp_array = []
         for i in xrange(count, total_char):
             temp_array = []
             for j in xrange(count, i+1):
                  temp_array.append(char_list[j])
-            # print temp_array
             all_words.append(temp_array)
     print all_words
 
-    for array in all_words:
-        if array[0] in vowels:
-            person_a_words.append(array)
+    for first_char in all_words:
+        if first_char[0] in vowels:
+            person_a_words.append(first_char)
+
+    for first_char in all_words:
+        if first_char[0] in consonants:
+            person_b_words.append(first_char)
+
+    person_a_score = len(person_a_words)
+    person_b_score = len(person_b_words)
+    if person_a_score == person_b_score:
+        print "Draw"
+    if person_a_score > person_b_score:
+        print person_a_name + " wins!"
+        print "Score: " + person_a_score
+    if person_a_score < person_b_score:
+        print person_b_name + " wins!"
+        print "Score: " + person_b_score
 
 
 
