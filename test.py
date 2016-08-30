@@ -70,10 +70,10 @@ class CreateContents(unittest.TestCase):
 		# self.admin_hover_menu()
 		# self.ckeditor_image_upload()
 
-	# @classmethod
-	# def tearDown(cls):
-	# 	# Close the browser window
-	# 	cls.driver.quit()
+	@classmethod
+	def tearDown(cls):
+		# Close the browser window
+		cls.driver.quit()
 
 
 if __name__ == '__main__':
