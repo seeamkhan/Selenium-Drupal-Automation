@@ -22,7 +22,6 @@ class CreateContents(unittest.TestCase):
 		cls.add_basic_page_xpath = "//ul[contains(@id, 'admin-menu-menu')]/li[2]/ul/li[1]/ul/li[2]/a"
 		cls.user_field_xpath = "//input[contains(@id, 'edit-name')]"
 		cls.pass_field_xpath = "//input[contains(@id, 'edit-pass')]"
-		# cls.login_button_xpath_array = ["//button[contains(@value, 'Log in')]", "//input[contains(@value, 'Log in')]"]
 		cls.login_button_xpath_bootstrap = "//button[contains(@value, 'Log in')]"
 		cls.login_button_xpath_2 = "//input[contains(@value, 'Log in')]"
 		cls.logout_link_xpath = "//a[contains(text(), 'Log out')]"  # Enable this to hard-code username and password. (Not recommended, for testing purpose only).
@@ -53,10 +52,7 @@ class CreateContents(unittest.TestCase):
 			self.driver.find_element_by_xpath(self.login_button_xpath_bootstrap).click()
 		except:
 			self.driver.find_element_by_xpath(self.login_button_xpath_2).click()
-		finally:
-			return True
 
-		# self.driver.find_element_by_xpath(self.login_button_xpath_bootstrap).click()
 
 	# print "user name entered successfully!!"
 
