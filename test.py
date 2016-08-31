@@ -25,8 +25,8 @@ class CreateContents(unittest.TestCase):
 		cls.login_button_xpath_bootstrap = "//button[contains(@value, 'Log in')]"
 		cls.login_button_xpath_2 = "//input[contains(@value, 'Log in')]"
 		cls.logout_link_xpath = "//a[contains(text(), 'Log out')]"  # Enable this to hard-code username and password. (Not recommended, for testing purpose only).
-		cls.username = "panth.admin"
-		cls.password = "@tester26#"
+		cls.username = ""
+		cls.password = ""
 
 # Declared is_element_present method
 	def is_element_present(self, how, what):

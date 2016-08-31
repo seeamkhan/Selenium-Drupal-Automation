@@ -36,12 +36,12 @@ class CreateContents(unittest.TestCase):
         cls.success_message_xpath = "//div[contains(@class, 'alert-success')]"
 
 #Enable this to hard-code username and password. (Not recommended, for testing purpose only).
-        cls.username = "panth.admin"
-        cls.password = "@tester26#"
+        # cls.username = ""
+        # cls.password = ""
 
 # Enable this to get username nad password from user input
-        # cls.username = raw_input('Please type your Username or Email: ')
-        # cls.password = raw_input('Please type your password: ')
+        cls.username = raw_input('Please type your Username or Email: ')
+        cls.password = raw_input('Please type your password: ')
 
 # Enable this to get username and password from credential file
     # credentials_file = os.path.join(os.path.dirname(__file__), 'login.credentials')
