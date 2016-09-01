@@ -10,16 +10,16 @@ import unittest, time, re
 import os
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
-
-
+import Conf_Reader
 
 
 class CreateContents(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
+    # def setUpC(cls):
         cls.driver = webdriver.Chrome()
         cls.driver.maximize_window()
-        cls.base_url = "http://jaxara.dev.lin2.panth.com/"
+        cls.base_url = "http://localhost/drupal7/"
         cls.driver.get(cls.base_url + "user")
 
 # Drupal common xpath:
@@ -40,13 +40,13 @@ class CreateContents(unittest.TestCase):
         # cls.password = ""
 
 # Enable this to get username nad password from user input
-        cls.username = raw_input('Please type your Username or Email: ')
-        cls.password = raw_input('Please type your password: ')
+#         cls.username = raw_input('Please type your Username or Email: ')
+#         cls.password = raw_input('Please type your password: ')
 
 # Enable this to get username and password from credential file
-    # credentials_file = os.path.join(os.path.dirname(__file__), 'login.credentials')
-    # username = Conf_Reader.get_value(credentials_file, 'LOGIN_USER')
-    # password = Conf_Reader.get_value(credentials_file, 'LOGIN_PASSWORD')
+    credentials_file = os.path.join(os.path.dirname(__file__), 'login.credentials')
+    username = Conf_Reader.get_value(credentials_file, 'LOGIN_USER')
+    password = Conf_Reader.get_value(credentials_file, 'LOGIN_PASSWORD')
 
 # Declared is_element_present method
     def is_element_present(self, how, what):
@@ -62,7 +62,7 @@ class CreateContents(unittest.TestCase):
         return True
 
 # User Login method:
-    def login_as_user(self):
+    def test_1_login_as_user(self):
         self.driver.find_element_by_xpath(self.user_field_xpath).clear()
         self.driver.find_element_by_xpath(self.user_field_xpath).send_keys(self.username)
         self.driver.find_element_by_xpath(self.pass_field_xpath).clear()
@@ -71,13 +71,13 @@ class CreateContents(unittest.TestCase):
         # print "user name entered successfully!!"
 
 
-    def verify_login_success(self):
+    def test_2_verify_login_success(self):
         self.assertTrue(self.is_element_present(By.XPATH, self.logout_link_xpath))
         # print "Login successful verified"
 
 
 # Add new Contents method:
-    def admin_hover_menu(self):
+    def test_3_admin_hover_menu(self):
         content_menu_hover = self.driver.find_element_by_xpath(self.content_menu_xpath)
         hover_content = ActionChains(self.driver).move_to_element(content_menu_hover)
         hover_content.perform()
@@ -118,7 +118,7 @@ class CreateContents(unittest.TestCase):
         self.driver.switch_to.default_content()
 
 # Ckeditor file upload method:
-    def ckeditor_image_upload(self):
+    def test_4_ckeditor_image_upload(self):
         # Image upload
         image_upload_button_xpath = "//a[contains(@id, 'cke_82')]//span[contains(@class, 'cke_button_icon cke_button__image_icon')]"
         browse_button_xpath = "//span[contains(@id, 'cke_142_label')]"
@@ -186,16 +186,16 @@ class CreateContents(unittest.TestCase):
 
 
 # Run all the test cases
-    def test_login(self):
-        # self.verify_login_page()
-        self.login_as_user()
-        self.verify_login_success()
-        self.admin_hover_menu()
-        self.ckeditor_image_upload()
+#     def test_login(self):
+#         # self.verify_login_page()
+#         self.login_as_user()
+#         self.verify_login_success()
+#         self.admin_hover_menu()
+#         self.ckeditor_image_upload()
 
 
     @classmethod
-    def tearDown(cls):
+    def tearDownClass(cls):
         # Close the browser window
         cls.driver.quit()
 
