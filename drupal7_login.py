@@ -12,8 +12,6 @@ from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 
 
-
-
 class CreateContents(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
