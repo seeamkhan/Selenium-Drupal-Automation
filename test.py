@@ -40,13 +40,13 @@ class CreateContents(unittest.TestCase):
 # Declared is_element_present method
 	def is_element_present(self, how, what):
 		"""
-	Utility method to check presence of an element on page
-	:param how: By locator type
-	:param what: locator value
-	"""
+    Utility method to check presence of an element on page
+    :param how: By locator type
+    :param what: locator value
+    """
 		try:
 			self.driver.find_element(by=how, value=what)
-		except NoSuchElementException, e:
+		except NoSuchElementException as e:
 			return False
 		return True
 
@@ -56,32 +56,32 @@ class CreateContents(unittest.TestCase):
 		self.driver.find_element_by_xpath(self.user_field_xpath).send_keys(self.username)
 		self.driver.find_element_by_xpath(self.pass_field_xpath).clear()
 		self.driver.find_element_by_xpath(self.pass_field_xpath).send_keys(self.password)
-		login_button_found = False
-		logout_link_found = False
+		# login_button_found = False
+		# logout_link_found = False
 		login_error_msg_xpath = "//div[contains(@class, 'alert-danger')]"
-		try:
-			self.driver.find_element_by_xpath(self.login_button_xpath_bootstrap).click()
-			login_button_found = True
-			print "Bootstrap theme login button found."
-		except:
-			if (login_button_found == False):
-				self.driver.find_element_by_xpath(self.login_button_xpath_2).click()
-				login_button_found = True
-				print "Other theme login button found"
-			if (login_button_found == False):
-				print "Login Button not found"
+		login_button_link_list = [
+			self.login_button_xpath_bootstrap,
+			self.login_button_xpath_2
+		]
+		for i in xrange(len(login_button_link_list)):
+			try:
+				self.driver.find_element_by_xpath(login_button_link_list[i]).click()
+				print "Some login button found"
+				break
+			except:
+				# pass
+				print "No login button found"
 
 		# Verify Logout link is present
 		try:
-			self.assertTrue(self.is_element_present(By.XPATH, self.logout_link_xpath))
-			print "1. User Login test PASS!"
-			logout_link_found = True
-
+			self.assertTrue(self.is_element_present(By.XPATH, login_error_msg_xpath))
+			print "Login Failed! Please check Username/email and Password"
 		except:
-			if (login_button_found == False):
-				self.assertTrue(self.is_element_present(By.XPATH, login_error_msg_xpath))
-			if (login_button_found == False):
-				print "Login Failed! Please check Username/email and Password"
+			pass
+
+		self.assertTrue(self.is_element_present(By.XPATH, self.logout_link_xpath))
+		print "1. User Login test PASS!"
+
 		time.sleep(2)
 
 

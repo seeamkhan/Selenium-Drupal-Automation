@@ -83,10 +83,8 @@ class CreateContents(unittest.TestCase):
             print "Login Failed! Please check Username/email and Password"
         except :
             pass
-
         self.assertTrue(self.is_element_present(By.XPATH, self.logout_link_xpath))
         print "1. User Login test PASS!"
-
         time.sleep(2)
 
 
