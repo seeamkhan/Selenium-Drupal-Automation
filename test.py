@@ -16,10 +16,13 @@ class CreateContents(unittest.TestCase):
     def setUpClass(cls):
         cls.driver = webdriver.Chrome()
         cls.driver.maximize_window()
-        # cls.base_url = "https://stevieawards.dev.lin2.panth.com/"
-        cls.base_url = "http://jaxara.dev.lin2.panth.com/"
-        # cls.base_url = "http://localhost/drupal7/"
-        cls.driver.get(cls.base_url + "user")  # Drupal common xpath:
+        # cls.base_url = "https://stevieawards.dev.lin2.panth.com/user"
+        # cls.base_url = "http://jaxara.dev.lin2.panth.com/user"
+        # cls.base_url = "http://localhost/drupal7/user"
+        cls.base_url = "http://seeam.com/drupal7/user"
+        # cls.base_url = "http://googel.com/"
+        cls.driver.get(cls.base_url)
+        # Drupal common xpath:
         cls.content_menu_xpath = "//li[contains(@class, 'admin-menu-toolbar-category expandable')]/a[contains(@href, '/admin/content')]"
         cls.add_content_menu_xpath = "//li[contains(@class, 'admin-menu-toolbar-category expandable')]/ul[contains(@class, 'dropdown')]/li[contains(@class, 'expandable')]/a[contains(@href, '/node/add')]"
         cls.add_basic_page_xpath = "//ul[contains(@id, 'admin-menu-menu')]/li[2]/ul/li[1]/ul/li[2]/a"
@@ -71,17 +74,16 @@ class CreateContents(unittest.TestCase):
             except:
                 # pass
                 print "No login button found"
-
         # Verify Logout link is present
         try:
             self.assertTrue(self.is_element_present(By.XPATH, login_error_msg_xpath))
             print "Login Failed! Please check Username/email and Password"
         except:
             pass
-
+        # assert and halt the test if login is not successful.
         self.assertTrue(self.is_element_present(By.XPATH, self.logout_link_xpath))
         print "1. User Login test PASS!"
-        time.sleep(2)
+        # time.sleep(2)
 
 
     def test_2_nav_to_basic_create_basic_page(self):
@@ -111,60 +113,48 @@ class CreateContents(unittest.TestCase):
         self.assertTrue(self.is_element_present(By.XPATH, self.basic_page_title_xpath))
         print "2. Navigate to Create Basic page test PASS!"
 
+    def test_3_basic_page_title(self):
         # Enter data in the Basic Page fields
         basic_page_title_field_xpath = "//input[contains(@id, 'edit-title')]"
         WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, basic_page_title_field_xpath)))
         self.driver.find_element_by_xpath(basic_page_title_field_xpath).clear()
         self.driver.find_element_by_xpath(basic_page_title_field_xpath).send_keys("Test Basic Page")
+        print "3. Basic page title enter PASS!"
 
 
-    def check_editor(self):
+    def test_4_check_editor(self):
+        final_ckeditor = ""
+        ckeditor_type_list = [
+            self.basic_page_body_xpath_imce_1,
+            self.basic_page_body_xpath_ckfinder,
+            self.basic_page_body_xpath_imce_2
+        ]
+        for i in xrange(len(ckeditor_type_list)):
+            try:
+                self.driver.find_element_by_xpath(ckeditor_type_list[i])
+                final_ckeditor = ckeditor_type_list[i]
+                # break  # break should be uncomment after finding a solution for ckeditor image button xpath
+            except:
+                print ckeditor_type_list[i], "does not found"
+        print final_ckeditor
 
-    #     try:
-    #         if (False == wait):
-    #             self.driver.find_element_by_xpath(element)
-    #         else:
-    #             WebDriverWait(self.driver, waitTimeInSec).until(
-    #                 EC.presence_of_element_located((By.XPATH, element)))
-    #     except:
-    #         print 'Element not found'
-    #
-    # def test_3_ckeditor_input(self):
-    #
-    #     er = [self.basic_page_body_xpath_imce_1, self.basic_page_body_xpath_ckfinder, self.basic_page_body_xpath_imce_2]
-    #
-    #     for (index, element) in er:
-    #         if (0 == index):
-    #             self.eheck_editor(element, True, 3)
-    #         else:
-    #             self.eheck_editor(element)
+    # CKEdtor input flow for basic_page_body_xpath_imce_2. This need to be in seperate def and call accordingly.
+        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, final_ckeditor)))
+        #Locate the iframes
+        ckeditor_frame = self.driver.find_element_by_xpath(final_ckeditor)
 
-        # try:
-        # 	for index, element in [self.basic_page_body_xpath_imce_1, self.basic_page_body_xpath_ckfinder, self.basic_page_body_xpath_imce_2]:
-        # 		if ( 0 == index ):
-        # 			self.eheck_editor(element, True, 3)
-        # 		else:
-        # 			self.eheck_editor(element)
-        #
-        #
-        # 	WebDriverWait(self.driver, 2).until(EC.presence_of_element_located((By.XPATH, self.basic_page_body_xpath_imce_1)))
-        # 	print "IMCE found."
-        # 	editor_found = True
-        # except:
-        # 	print "IMCE not found"
-        # if (editor_found == False):
-        # 	try:
-        # 		self.driver.find_element_by_xpath(self.basic_page_body_xpath_ckfinder)
-        # 		print "CKFinder found"
-        # 		editor_found = True
-        # 	except:
-        # 		print "CKFinder not found"
-        # if (editor_found == False):
-        # 	try:
-        # 		self.driver.find_element_by_xpath(self.basic_page_body_xpath_imce_2)
-        # 	except:
-        # 		print "CKFinder not found"
-        # if ( editor_found == False ):
+        #Switch to frame
+        self.driver.switch_to.frame(ckeditor_frame)
+
+        #Send key to Ckeditor Body
+        editor_body = self.driver.find_element_by_xpath("//body")
+        editor_body.send_keys("Test Body")
+
+        # if driver is already inside ckeditor_frame, switch out first
+        self.driver.switch_to.default_content()
+        time.sleep(5)
+        print "4. CKEditor check test PASS!"
+
         # 	print 'No editor found yet!'
 
 

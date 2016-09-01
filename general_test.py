@@ -19,8 +19,9 @@ class CreateContents(unittest.TestCase):
     # def setUpC(cls):
         cls.driver = webdriver.Chrome()
         cls.driver.maximize_window()
-        cls.base_url = "http://localhost/drupal7/"
-        cls.driver.get(cls.base_url + "user")
+        # cls.base_url = "http://localhost/drupal7/user"
+        cls.base_url = "http://seeam.com/drupal7/user"
+        cls.driver.get(cls.base_url)
 
 # Drupal common xpath:
         cls.content_menu_xpath = "//li[contains(@class, 'admin-menu-toolbar-category expandable')]/a[contains(@href, '/admin/content')]"
@@ -137,6 +138,7 @@ class CreateContents(unittest.TestCase):
         self.driver.switch_to.window(self.driver.window_handles[1])
         print ("Switched to " + self.driver.title + "window")
         upload_button_xpath = "//span[contains(text(), 'Upload')]"
+        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, upload_button_xpath)))
         self.driver.find_element_by_xpath(upload_button_xpath).click()
         upload_box_xpath = "//div[contains(@id, 'op-content-upload')]"
         choose_file_xpath = "//input[contains(@id, 'edit-imce')]"
