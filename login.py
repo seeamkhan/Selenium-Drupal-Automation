@@ -19,8 +19,8 @@ class CreateContents(unittest.TestCase):
 
 
         # cls.base_url = "https://stevieawards.dev.lin2.panth.com/user"
-        cls.base_url = "http://jaxara.dev.lin2.panth.com/user"
-        # cls.base_url = "http://localhost/drupal7/user"
+        # cls.base_url = "http://jaxara.dev.lin2.panth.com/user"
+        cls.base_url = "http://localhost/drupal7/user"
         # cls.base_url = "http://google.com"
 
         cls.verificationErrors = []
@@ -49,12 +49,6 @@ class CreateContents(unittest.TestCase):
     :param how: By locator type
     :param what: locator value
     """
-        # try:
-        #     self.driver.find_element(by=how, value=what)
-        # except NoSuchElementException, e:
-        #     return True
-        # return True
-
         try:
             self.driver.find_element(by=how, value=what)
         except NoSuchElementException as e:
