@@ -19,8 +19,8 @@ class CreateContents(unittest.TestCase):
 
 
         # cls.base_url = "https://stevieawards.dev.lin2.panth.com/user"
-        # cls.base_url = "http://jaxara.dev.lin2.panth.com/user"
-        cls.base_url = "http://localhost/drupal7/user"
+        cls.base_url = "http://jaxara.dev.lin2.panth.com/user"
+        # cls.base_url = "http://localhost/drupal7/user"
         # cls.base_url = "http://google.com"
 
         cls.verificationErrors = []
@@ -63,10 +63,10 @@ class CreateContents(unittest.TestCase):
 
 # User Login method:
     def test_1_login_as_user(self):
-        # self.driver.find_element_by_xpath(self.user_field_xpath).clear()
-        # self.driver.find_element_by_xpath(self.user_field_xpath).send_keys(self.username)
-        # self.driver.find_element_by_xpath(self.pass_field_xpath).clear()
-        # self.driver.find_element_by_xpath(self.pass_field_xpath).send_keys(self.password)
+        self.driver.find_element_by_xpath(self.user_field_xpath).clear()
+        self.driver.find_element_by_xpath(self.user_field_xpath).send_keys(self.username)
+        self.driver.find_element_by_xpath(self.pass_field_xpath).clear()
+        self.driver.find_element_by_xpath(self.pass_field_xpath).send_keys(self.password)
         # login_button_found = False
         # logout_link_found = False
         login_error_msg_xpath = "//div[contains(@class, 'alert-danger')]"
@@ -87,11 +87,10 @@ class CreateContents(unittest.TestCase):
         try:
             self.assertTrue(self.is_element_present(By.XPATH, login_error_msg_xpath))
             print "Login Failed! Please check Username/email and Password"
-
         except :
             pass
 
-        self.assertNotEqual(self.is_element_present(By.XPATH, login_error_msg_xpath))
+        self.assertTrue(self.is_element_present(By.XPATH, self.logout_link_xpath))
         print "1. User Login test PASS!"
 
         time.sleep(2)
