@@ -67,13 +67,14 @@ class CreateContents(unittest.TestCase):
         self.driver.find_element_by_xpath(self.user_field_xpath).send_keys(self.username)
         self.driver.find_element_by_xpath(self.pass_field_xpath).clear()
         self.driver.find_element_by_xpath(self.pass_field_xpath).send_keys(self.password)
-        self.driver.find_element_by_xpath(self.login_button_xpath_bootstrap).click()
-        # print "user name entered successfully!!"
+        try:
+            self.driver.find_element_by_xpath(self.login_button_xpath_bootstrap).click()
+        except:
+            self.driver.find_element_by_xpath(self.login_button_xpath_2).click()
 
-
-    def test_2_verify_login_success(self):
+        # Verify Logout link is present
         self.assertTrue(self.is_element_present(By.XPATH, self.logout_link_xpath))
-        # print "Login successful verified"
+        print "User Login test PASS!"
 
 
 # Add new Contents method:
