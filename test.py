@@ -2,6 +2,8 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
 from __builtin__ import classmethod
+
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support.select import Select
 import unittest, time, re
@@ -32,8 +34,9 @@ class CreateContents(unittest.TestCase):
         cls.login_button_xpath_2 = "//input[contains(@value, 'Log in')]"
         cls.basic_page_title_xpath = "//h1[contains(text(), 'Create Basic page')]"
         cls.logout_link_xpath = "//a[contains(text(), 'Log out')]"
-        cls.basic_page_body_xpath_imce = "//div[contains(@id, 'cke_edit-body-und-0-value')]//div[contains(@class, 'cke_contents cke_reset')]/iframe"
+        cls.basic_page_body_xpath_imce = "//label[contains(text(), 'Body')]//following-sibling::div//iframe"
         cls.basic_page_body_xpath_ckfinder = "//td[contains(@id, 'cke_contents_edit-body-und-0-value')]/iframe"
+        cls.final_ckeditor = ""
 
 # Enable this to get username and password from credential file
     credentials_file = os.path.join(os.path.dirname(__file__), 'login.credentials')
@@ -122,7 +125,7 @@ class CreateContents(unittest.TestCase):
 
 
     def test_4_check_editor(self):
-        final_ckeditor = ""
+        global final_ckeditor
         ckeditor_type_list = [
             self.basic_page_body_xpath_imce,
             self.basic_page_body_xpath_ckfinder
@@ -132,13 +135,15 @@ class CreateContents(unittest.TestCase):
             try:
                 self.driver.find_element_by_xpath(ckeditor_type_list[i])
                 final_ckeditor = ckeditor_type_list[i]
-                # break  # break should be uncomment after finding a solution for ckeditor image button xpath
+                break
             except:
                 print ckeditor_type_list[i], " does not found"
-        print final_ckeditor
+        print "Final CKEditor is: ", final_ckeditor
 
-    # CKEdtor input flow for basic_page_body_xpath_imce. This need to be in seperate def and call accordingly.
-        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, final_ckeditor)))
+    # CKEdtor input flow for basic_page_body_xpath_imce. This need to be in separate def and call accordingly.
+    def test_5_imce_input(self):
+        global final_ckeditor
+        print "Final ckeditor in imce: ", final_ckeditor
         #Locate the iframes
         ckeditor_frame = self.driver.find_element_by_xpath(final_ckeditor)
 
@@ -148,9 +153,12 @@ class CreateContents(unittest.TestCase):
         #Send key to Ckeditor Body
         editor_body = self.driver.find_element_by_xpath("//body")
         editor_body.send_keys("Test Body")
+        editor_body.send_keys(Keys.RETURN)
 
         # if driver is already inside ckeditor_frame, switch out first
         self.driver.switch_to.default_content()
+
+
         time.sleep(5)
         print "4. CKEditor check test PASS!"
 
