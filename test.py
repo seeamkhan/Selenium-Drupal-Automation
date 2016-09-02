@@ -11,6 +11,7 @@ import os
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support import expected_conditions as EC
 import Conf_Reader
+import ckeditor_imce
 
 
 class CreateContents(unittest.TestCase):
@@ -163,14 +164,14 @@ class CreateContents(unittest.TestCase):
         print "4. CKEditor check test PASS!"
 
     def imce_image_upload(self):
-
+        pass
 
     def ckfinder_image_upload(self):
         pass
 
     def test_6_image_upload(self):
         global final_ckeditor
-        if (final_ckeditor && final_ckeditor == self.basic_page_body_xpath_ckfinder):
+        if (final_ckeditor == self.basic_page_body_xpath_ckfinder):
             self.ckfinder_image_upload()
         else:
             self.imce_image_upload()
