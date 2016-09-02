@@ -33,14 +33,15 @@ class CreateContents(unittest.TestCase):
         cls.login_button_xpath_2 = "//input[contains(@value, 'Log in')]"
         cls.basic_page_title_xpath = "//h1[contains(text(), 'Create Basic page')]"
         cls.logout_link_xpath = "//a[contains(text(), 'Log out')]"
-        cls.basic_page_body_xpath_imce = "//label[contains(text(), 'Body')]//following-sibling::div//iframe"
-        cls.basic_page_body_xpath_ckfinder = "//td[contains(@id, 'cke_contents_edit-body-und-0-value')]/iframe"
-        cls.final_ckeditor = ""
-        cls.image_upload_button_imce_xpath = "//label[contains(text(),'Body')]//following-sibling::div//a[contains(@class,'cke_button__image')]"
-        cls.image_upload_button_ckfinder_xpath = "//label[contains(text(),'Body')]//following-sibling::div//span[contains(text(), 'Image')]"
+        cls.basic_page_body_xpath = "//label[contains(text(), 'Body')]//following-sibling::div//iframe"
+        cls.ckfinder = 0
+        # cls.ckeditor_image_upload_button_xpath = "//label[contains(text(),'Body')]//following-sibling::div//a[contains(@class,'cke_button__image')]"
+        # cls.ckeditor_image_upload_button_xpath = "//label[contains(text(),'Body')]//following-sibling::div//span[contains(text(), 'Image')]"
+        cls. ckeditor_image_upload_button_xpath = "//label[contains(text(),'Body')]//following-sibling::div//span[contains(@class, 'cke_button__image_icon')]"
         cls.final_browse_button = ""
         cls.browse_button_imce_xpath = "//span[contains(@id, 'cke_142_label')]"
-        cls.browse_button_ckfinder_xpath = "test"
+        # cls.browse_button_ckfinder_xpath = "test"
+        cls.save_content_button_xpath = "//input[contains(@value, 'Save')]"
 
 # Enable this to get username and password from credential file
     credentials_file = os.path.join(os.path.dirname(__file__), 'login.credentials')
@@ -89,7 +90,6 @@ class CreateContents(unittest.TestCase):
         print "1. User Login test PASS!"
         # time.sleep(2)
 
-
     def test_2_nav_to_basic_create_basic_page(self):
         content_menu_hover = self.driver.find_element_by_xpath(self.content_menu_xpath)
         try:
@@ -125,114 +125,101 @@ class CreateContents(unittest.TestCase):
         self.driver.find_element_by_xpath(basic_page_title_field_xpath).send_keys("Test Basic Page")
         print "3. Basic page title enter PASS!"
 
-    def test_find_ckfinder_in_page_source(self):
+    def test_4_find_ckfinder_in_page_source(self):
+        global ckfinder
         html_source = self.driver.page_source
         if "ckfinder" in html_source:
-            print "ckfinder found."
+            ckfinder = 1
+            print "4. ckfinder found."
         else:
-            print "ckdinder not found."
-        time.sleep(3)
+            ckfinder = 0
+        print "4. IMCE file uploader check PASS!"
 
-    # def test_4_check_editor(self):
-    #     global final_ckeditor
-    #     ckeditor_type_list = [
-    #         self.basic_page_body_xpath_imce,
-    #         self.basic_page_body_xpath_ckfinder
-    #     ]
-    #     time.sleep(1)
-    #     for i in xrange(len(ckeditor_type_list)):
-    #         try:
-    #             self.driver.find_element_by_xpath(ckeditor_type_list[i])
-    #             final_ckeditor = ckeditor_type_list[i]
-    #             break
-    #         except:
-    #             print ckeditor_type_list[i], " does not found"
-    #     print "4. Final CKEditor is: ", final_ckeditor
-    #
-    # # CKEdtor input flow for basic_page_body_xpath_imce. This need to be in separate def and call accordingly.
-    # def test_5_imce_input(self):
-    #     global final_ckeditor
-    #     print "Final ckeditor in imce: ", final_ckeditor
-    #     #Locate the iframes
-    #     ckeditor_frame = self.driver.find_element_by_xpath(final_ckeditor)
-    #
-    #     #Switch to frame
-    #     self.driver.switch_to.frame(ckeditor_frame)
-    #
-    #     #Send key to Ckeditor Body
-    #     editor_body = self.driver.find_element_by_xpath("//body")
-    #     editor_body.send_keys("Test Body")
-    #     editor_body.send_keys(Keys.RETURN)
-    #
-    #     # if driver is already inside ckeditor_frame, switch out first
-    #     self.driver.switch_to.default_content()
-    #     print "4. CKEditor check test PASS!"
-    #
-    # def imce_image_upload(self):
-    #     # global image_upload_button_imce_xpath
-    #     # global browse_button_imce_xpath
-    #     self.driver.find_element_by_xpath(self.image_upload_button_imce_xpath).click()
-    #     time.sleep(1)
-    #     try:
-    #         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, self.browse_button_imce_xpath)))
-    #     finally:
-    #         self.driver.find_element_by_xpath(self.browse_button_imce_xpath).click()
-    #
-    #         # window handle
-    #         # print current window title
-    #         # print ("Switched to " + self.driver.title + "window")
-    #         # Switch to image upload window
-    #         self.driver.switch_to.window(self.driver.window_handles[1])
-    #         print ("Switched to " + self.driver.title + "window")
-    #         upload_button_xpath = "//span[contains(text(), 'Upload')]"
-    #         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, upload_button_xpath)))
-    #         self.driver.find_element_by_xpath(upload_button_xpath).click()
-    #         upload_box_xpath = "//div[contains(@id, 'op-content-upload')]"
-    #         choose_file_xpath = "//input[contains(@id, 'edit-imce')]"
-    #         imce_upload_button_xpath = "//input[contains(@id, 'edit-upload')]"
-    #
-    #         # Upload file
-    #         try:
-    #             WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, upload_box_xpath)))
-    #         except NoSuchElementException:
-    #             return False
-    #         finally:
-    #             file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_files', 'test.png')
-    #             # print file_path
-    #             self.driver.find_element_by_xpath(choose_file_xpath).send_keys(file_path)
-    #         self.driver.find_element_by_xpath(imce_upload_button_xpath).click()
-    #         time.sleep(3)
-    #         row_count_int = len(self.driver.find_elements_by_xpath("//table[@id='file-list']/tbody/tr"))
-    #         row_count = str(row_count_int)
-    #         print row_count
-    #         last_file_xpath = "//table[@id='file-list']/tbody/tr[" + row_count + "]/td/span"
-    #         print last_file_xpath
-    #         # self.driver.find_element_by_xpath(last_file_xpath).click()
-    #         insert_file_xpath = "//span[contains(text(), 'Insert file')]"
-    #         time.sleep(2)
-    #         try:
-    #             WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, insert_file_xpath)))
-    #         except NoSuchElementException:
-    #             return False
-    #         finally:
-    #             self.driver.find_element_by_xpath(insert_file_xpath).click()
-    #
-    #         self.driver.switch_to.window(self.driver.window_handles[0])
-    #         print self.driver.title
-    #         ckeditor_ok_button_xpath = "//span[contains(text(), 'OK')]"
-    #         self.driver.find_element_by_xpath(ckeditor_ok_button_xpath).click()
-    #         print "File upload successful."
-    #         time.sleep(3)
-    #
-    # def ckfinder_image_upload(self):
-    #     print "ckfinder is not completed yet."
-    #
-    # def test_6_image_upload(self):
-    #     global final_ckeditor
-    #     if (final_ckeditor == self.basic_page_body_xpath_ckfinder):
-    #         self.ckfinder_image_upload()
-    #     else:
-    #         self.imce_image_upload()
+    def test_5_ckeditor_body_input(self):
+        #Locate the iframes
+        ckeditor_frame = self.driver.find_element_by_xpath(self.basic_page_body_xpath)
+        #Switch to frame
+        self.driver.switch_to.frame(ckeditor_frame)
+        #Send key to Ckeditor Body
+        editor_body = self.driver.find_element_by_xpath("//body")
+        editor_body.send_keys("Test Body")
+        editor_body.send_keys(Keys.RETURN)
+        # if driver is already inside ckeditor_frame, switch out first
+        self.driver.switch_to.default_content()
+        print "5. CKEditor Body input test PASS!"
+
+    def test_6_ckeditor_image_upload(self):
+        global ckfinder
+        if ckfinder is 0:
+            # click on the ckeditor image upload button.
+            self.driver.find_element_by_xpath(self.ckeditor_image_upload_button_xpath).click()
+
+            # wait for the image properties pop-up to appear, then click on the Browse Server button.
+            time.sleep(1)
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, self.browse_button_imce_xpath)))
+            self.driver.find_element_by_xpath(self.browse_button_imce_xpath).click()
+
+            # Switch to image upload window
+            self.driver.switch_to.window(self.driver.window_handles[1])
+            # print ("Switched to " + self.driver.title + "window")
+
+            # From the image upload window, click on the 'Upload' button.
+            upload_button_xpath = "//span[contains(text(), 'Upload')]"
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, upload_button_xpath)))
+            self.driver.find_element_by_xpath(upload_button_xpath).click()
+
+            # define various upload window elements with variables.
+            upload_box_xpath = "//div[contains(@id, 'op-content-upload')]"
+            choose_file_xpath = "//input[contains(@id, 'edit-imce')]"
+            imce_upload_button_xpath = "//input[contains(@id, 'edit-upload')]"
+
+            # Select file for uploading.
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, upload_box_xpath)))
+            file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'test_files', 'test.png')
+            self.driver.find_element_by_xpath(choose_file_xpath).send_keys(file_path)
+
+            #click 'Upload' button.
+            self.driver.find_element_by_xpath(imce_upload_button_xpath).click()
+
+            # wait for the file to upload
+            time.sleep(3)
+
+            # Find last uploaded file.
+            row_count_int = len(self.driver.find_elements_by_xpath("//table[@id='file-list']/tbody/tr"))
+            row_count = str(row_count_int)
+            # print row_count
+            last_file_xpath = "//table[@id='file-list']/tbody/tr[" + row_count + "]/td/span"
+            # print last_file_xpath
+
+            # Insert last uploaded file into the 'Image Property' pop-up.
+            # self.driver.find_element_by_xpath(last_file_xpath).click()
+            insert_file_xpath = "//span[contains(text(), 'Insert file')]"
+            time.sleep(2)
+            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, insert_file_xpath)))
+            self.driver.find_element_by_xpath(insert_file_xpath).click()
+
+            # Switch from the file uploader window to Main window.
+            self.driver.switch_to.window(self.driver.window_handles[0])
+            # print self.driver.title
+
+            # Click 'OK' button on 'Image Property' pop-up to put the uploaded file into CKEditor body.
+            ckeditor_ok_button_xpath = "//span[contains(text(), 'OK')]"
+            self.driver.find_element_by_xpath(ckeditor_ok_button_xpath).click()
+            print "6. CKEditor File upload PASS!"
+            # time.sleep(3)
+
+    def test_7_save_basic_page(self):
+        # Click 'Save' to save the Basic Page
+        self.driver.find_element_by_xpath(self.save_content_button_xpath).click()
+
+        # Verify successful Basic Page creation
+        test_page_title_xpath = "//em[contains(text(), 'Test Basic Page')]"
+        # self.assertTrue(self.is_element_present(By.XPATH, self.success_message_xpath))
+        self.assertTrue(self.is_element_present(By.XPATH, test_page_title_xpath))
+        print "7. Basic page saved PASS!"
+        time.sleep(1)
+
+
 
     @classmethod
     def tearDownClass(cls):
