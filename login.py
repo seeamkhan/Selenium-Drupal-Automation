@@ -19,10 +19,10 @@ class CreateContents(unittest.TestCase):
 
 
         # cls.base_url = "https://stevieawards.dev.lin2.panth.com/user"
-        # cls.base_url = "http://jaxara.dev.lin2.panth.com/user"
+        cls.base_url = "http://jaxara.dev.lin2.panth.com/user"
         # cls.base_url = "http://localhost/drupal7/user"
         # cls.base_url = "http://google.com"
-        cls.base_url = "http://seeam.com/drupal7/user"
+        # cls.base_url = "http://seeam.com/drupal7/user"
 
         cls.verificationErrors = []
         cls.driver.get(cls.base_url)  # Drupal common xpath:
@@ -72,11 +72,11 @@ class CreateContents(unittest.TestCase):
         for i in xrange(len(login_button_link_list)):
             try:
                 self.driver.find_element_by_xpath(login_button_link_list[i]).click()
-                print "Some login button found"
+                print login_button_link_list[i], " login button found"
                 break
             except:
                 # pass
-                print "No login button found"
+                print login_button_link_list[i], "login button not found"
 
         # Verify Logout link is present
         try:

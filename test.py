@@ -16,10 +16,10 @@ class CreateContents(unittest.TestCase):
     def setUpClass(cls):
         cls.driver = webdriver.Chrome()
         cls.driver.maximize_window()
-        # cls.base_url = "https://stevieawards.dev.lin2.panth.com/user"
+        cls.base_url = "https://stevieawards.dev.lin2.panth.com/user"
         # cls.base_url = "http://jaxara.dev.lin2.panth.com/user"
         # cls.base_url = "http://localhost/drupal7/user"
-        cls.base_url = "http://seeam.com/drupal7/user"
+        # cls.base_url = "http://seeam.com/drupal7/user"
         # cls.base_url = "http://googel.com/"
         cls.driver.get(cls.base_url)
         # Drupal common xpath:
@@ -32,8 +32,7 @@ class CreateContents(unittest.TestCase):
         cls.login_button_xpath_2 = "//input[contains(@value, 'Log in')]"
         cls.basic_page_title_xpath = "//h1[contains(text(), 'Create Basic page')]"
         cls.logout_link_xpath = "//a[contains(text(), 'Log out')]"
-        cls.basic_page_body_xpath_imce_1 = "//div[contains(@id, 'cke_1_contents')]/iframe"
-        cls.basic_page_body_xpath_imce_2 = "//div[contains(@id, 'cke_2_contents')]/iframe"
+        cls.basic_page_body_xpath_imce = "//div[contains(@id, 'cke_edit-body-und-0-value')]//div[contains(@class, 'cke_contents cke_reset')]/iframe"
         cls.basic_page_body_xpath_ckfinder = "//td[contains(@id, 'cke_contents_edit-body-und-0-value')]/iframe"
 
 # Enable this to get username and password from credential file
@@ -125,20 +124,20 @@ class CreateContents(unittest.TestCase):
     def test_4_check_editor(self):
         final_ckeditor = ""
         ckeditor_type_list = [
-            self.basic_page_body_xpath_imce_1,
-            self.basic_page_body_xpath_ckfinder,
-            self.basic_page_body_xpath_imce_2
+            self.basic_page_body_xpath_imce,
+            self.basic_page_body_xpath_ckfinder
         ]
+        time.sleep(1)
         for i in xrange(len(ckeditor_type_list)):
             try:
                 self.driver.find_element_by_xpath(ckeditor_type_list[i])
                 final_ckeditor = ckeditor_type_list[i]
                 # break  # break should be uncomment after finding a solution for ckeditor image button xpath
             except:
-                print ckeditor_type_list[i], "does not found"
+                print ckeditor_type_list[i], " does not found"
         print final_ckeditor
 
-    # CKEdtor input flow for basic_page_body_xpath_imce_2. This need to be in seperate def and call accordingly.
+    # CKEdtor input flow for basic_page_body_xpath_imce. This need to be in seperate def and call accordingly.
         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, final_ckeditor)))
         #Locate the iframes
         ckeditor_frame = self.driver.find_element_by_xpath(final_ckeditor)
@@ -155,13 +154,6 @@ class CreateContents(unittest.TestCase):
         time.sleep(5)
         print "4. CKEditor check test PASS!"
 
-        # 	print 'No editor found yet!'
-
-
-
-
-        # time.sleep(5)
-        # print "3. CKEditor input test PASS!"
 
 
 
