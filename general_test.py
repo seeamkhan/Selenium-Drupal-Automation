@@ -122,7 +122,7 @@ class CreateContents(unittest.TestCase):
 # Ckeditor file upload method:
     def test_4_ckeditor_image_upload(self):
         # Image upload
-        image_upload_button_xpath = "//a[contains(@id, 'cke_82')]//span[contains(@class, 'cke_button_icon cke_button__image_icon')]"
+        image_upload_button_xpath = "//label[contains(text(),'Body')]//following-sibling::div//a[contains(@class,'cke_button__image')]"
         browse_button_xpath = "//span[contains(@id, 'cke_142_label')]"
         self.driver.find_element_by_xpath(image_upload_button_xpath).click()
         time.sleep(1)

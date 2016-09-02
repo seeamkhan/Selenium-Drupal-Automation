@@ -37,6 +37,11 @@ class CreateContents(unittest.TestCase):
         cls.basic_page_body_xpath_imce = "//label[contains(text(), 'Body')]//following-sibling::div//iframe"
         cls.basic_page_body_xpath_ckfinder = "//td[contains(@id, 'cke_contents_edit-body-und-0-value')]/iframe"
         cls.final_ckeditor = ""
+        cls.image_upload_button_imce_xpath = "//label[contains(text(),'Body')]//following-sibling::div//a[contains(@class,'cke_button__image')]"
+        cls.image_upload_button_ckfinder_xpath = "//label[contains(text(),'Body')]//following-sibling::div//span[contains(text(), 'Image')]"
+        cls.final_browse_button = ""
+        cls.browse_button_imce_xpath = "//span[contains(@id, 'cke_142_label')]"
+        cls.browse_button_ckfinder_xpath = "test"
 
 # Enable this to get username and password from credential file
     credentials_file = os.path.join(os.path.dirname(__file__), 'login.credentials')
@@ -61,8 +66,6 @@ class CreateContents(unittest.TestCase):
         self.driver.find_element_by_xpath(self.user_field_xpath).send_keys(self.username)
         self.driver.find_element_by_xpath(self.pass_field_xpath).clear()
         self.driver.find_element_by_xpath(self.pass_field_xpath).send_keys(self.password)
-        # login_button_found = False
-        # logout_link_found = False
         login_error_msg_xpath = "//div[contains(@class, 'alert-danger')]"
         login_button_link_list = [
             self.login_button_xpath_bootstrap,
@@ -138,7 +141,7 @@ class CreateContents(unittest.TestCase):
                 break
             except:
                 print ckeditor_type_list[i], " does not found"
-        print "Final CKEditor is: ", final_ckeditor
+        print "4. Final CKEditor is: ", final_ckeditor
 
     # CKEdtor input flow for basic_page_body_xpath_imce. This need to be in separate def and call accordingly.
     def test_5_imce_input(self):
@@ -157,13 +160,20 @@ class CreateContents(unittest.TestCase):
 
         # if driver is already inside ckeditor_frame, switch out first
         self.driver.switch_to.default_content()
-
-
-        time.sleep(5)
         print "4. CKEditor check test PASS!"
 
+    def imce_image_upload(self):
 
 
+    def ckfinder_image_upload(self):
+        pass
+
+    def test_6_image_upload(self):
+        global final_ckeditor
+        if (final_ckeditor && final_ckeditor == self.basic_page_body_xpath_ckfinder):
+            self.ckfinder_image_upload()
+        else:
+            self.imce_image_upload()
 
     @classmethod
     def tearDownClass(cls):
