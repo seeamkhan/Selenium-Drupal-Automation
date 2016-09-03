@@ -20,8 +20,8 @@ class CreateContents(unittest.TestCase):
         # cls.base_url = "https://stg.stevieawards.com/"
         # cls.base_url = "http://jaxara.dev.lin2.panth.com/"
         # cls.base_url = "http://localhost/drupal7/"
-        cls.base_url = "http://seeam.com/drupal7/"
-        # cls.base_url = "http://stg.sie.qioprogram.panth.com/"
+        # cls.base_url = "http://seeam.com/drupal7/"
+        cls.base_url = "http://stg.sie.qioprogram.panth.com/"
         # cls.base_url = "http://googel.com/"
         cls.driver.get(cls.base_url + "user")
         # Drupal common xpath:
@@ -40,8 +40,10 @@ class CreateContents(unittest.TestCase):
         # cls.ckeditor_image_upload_button_xpath = "//label[contains(text(),'Body')]//following-sibling::div//span[contains(text(), 'Image')]"
         cls. ckeditor_image_upload_button_xpath = "//label[contains(text(),'Body')]//following-sibling::div//span[contains(@class, 'cke_button__image_icon')]"
         cls.final_browse_button = ""
+        cls.browse_buttons_list = []
         cls.browse_button_local_xpath = "//span[contains(@id, 'cke_142_label')]"
         cls.browse_button_stevie_xpath = "//span[contains(@id, 'cke_108_label')]"
+        cls.browse_button_sie_xpath = "//span[contains(@id, 'cke_171_label')]"
         cls.save_content_button_xpath = "//input[contains(@value, 'Save')]"
 
 # Enable this to get username and password from credential file
@@ -155,19 +157,26 @@ class CreateContents(unittest.TestCase):
     def test_6_ckeditor_image_upload(self):
         global ckfinder
         global final_browse_button
+        global browse_button_list
+        browse_button_list = [self.browse_button_local_xpath, self.browse_button_stevie_xpath, self.browse_button_sie_xpath]
         if ckfinder is 0:
             # click on the ckeditor image upload button.
             self.driver.find_element_by_xpath(self.ckeditor_image_upload_button_xpath).click()
 
             # wait for the image properties pop-up to appear, then click on the Browse Server button.
             time.sleep(1)
-            try:
-                WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, self.browse_button_local_xpath)))
-                final_browse_button = self.browse_button_local_xpath
-            except:
-                WebDriverWait(self.driver, 3).until(
-                    EC.presence_of_element_located((By.XPATH, self.browse_button_stevie_xpath)))
-                final_browse_button = self.browse_button_stevie_xpath
+            for i in xrange(len(browse_button_list)):
+                try:
+                    WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, browse_button_list[i])))
+                    final_browse_button = browse_button_list[i]
+                    break
+                except:
+                    print "Unknown Browse Server button."
+            print final_browse_button
+            # except:
+            #     WebDriverWait(self.driver, 3).until(
+            #         EC.presence_of_element_located((By.XPATH, self.browse_button_stevie_xpath)))
+            #     final_browse_button = self.browse_button_stevie_xpath
             self.driver.find_element_by_xpath(final_browse_button).click()
 
             # Switch to image upload window
