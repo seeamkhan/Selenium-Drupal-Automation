@@ -17,12 +17,13 @@ class CreateContents(unittest.TestCase):
     def setUpClass(cls):
         cls.driver = webdriver.Chrome()
         cls.driver.maximize_window()
-        # cls.base_url = "https://stg.stevieawards.com/user"
-        # cls.base_url = "http://jaxara.dev.lin2.panth.com/user"
-        # cls.base_url = "http://localhost/drupal7/user"
-        cls.base_url = "http://seeam.com/drupal7/user"
+        # cls.base_url = "https://stg.stevieawards.com/"
+        # cls.base_url = "http://jaxara.dev.lin2.panth.com/"
+        # cls.base_url = "http://localhost/drupal7/"
+        cls.base_url = "http://seeam.com/drupal7/"
+        # cls.base_url = "http://stg.sie.qioprogram.panth.com/"
         # cls.base_url = "http://googel.com/"
-        cls.driver.get(cls.base_url)
+        cls.driver.get(cls.base_url + "user")
         # Drupal common xpath:
         cls.content_menu_xpath = "//li[contains(@class, 'admin-menu-toolbar-category expandable')]/a[contains(@href, '/admin/content')]"
         cls.add_content_menu_xpath = "//li[contains(@class, 'admin-menu-toolbar-category expandable')]/ul[contains(@class, 'dropdown')]/li[contains(@class, 'expandable')]/a[contains(@href, '/node/add')]"
@@ -39,8 +40,8 @@ class CreateContents(unittest.TestCase):
         # cls.ckeditor_image_upload_button_xpath = "//label[contains(text(),'Body')]//following-sibling::div//span[contains(text(), 'Image')]"
         cls. ckeditor_image_upload_button_xpath = "//label[contains(text(),'Body')]//following-sibling::div//span[contains(@class, 'cke_button__image_icon')]"
         cls.final_browse_button = ""
-        cls.browse_button_imce_xpath = "//span[contains(@id, 'cke_142_label')]"
-        # cls.browse_button_ckfinder_xpath = "test"
+        cls.browse_button_local_xpath = "//span[contains(@id, 'cke_142_label')]"
+        cls.browse_button_stevie_xpath = "//span[contains(@id, 'cke_108_label')]"
         cls.save_content_button_xpath = "//input[contains(@value, 'Save')]"
 
 # Enable this to get username and password from credential file
@@ -91,23 +92,24 @@ class CreateContents(unittest.TestCase):
         # time.sleep(2)
 
     def test_2_nav_to_basic_create_basic_page(self):
-        content_menu_hover = self.driver.find_element_by_xpath(self.content_menu_xpath)
-        try:
-            WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, self.content_menu_xpath)))
-        except:
-            print "Admin Menu not found."
-        hover_content = ActionChains(self.driver).move_to_element(content_menu_hover)
-        hover_content.perform()
-        add_content_hover = self.driver.find_element_by_xpath(self.add_content_menu_xpath)
-        hover_add_content = ActionChains(self.driver).move_to_element(add_content_hover)
-        hover_add_content.perform()
-
-        # Click on hover menu item (Content > Add content > Basic Page)
-        # self.assertTrue(self.is_element_present(By.XPATH, self.add_basic_page_xpath))
-        try:
-            self.driver.find_element_by_xpath(self.add_basic_page_xpath).click()
-        except:
-            print "Basic page create page not found."
+        self.driver.get(self.base_url + "node/add/page")
+        # content_menu_hover = self.driver.find_element_by_xpath(self.content_menu_xpath)
+        # try:
+        #     WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, self.content_menu_xpath)))
+        # except:
+        #     print "Admin Menu not found."
+        # hover_content = ActionChains(self.driver).move_to_element(content_menu_hover)
+        # hover_content.perform()
+        # add_content_hover = self.driver.find_element_by_xpath(self.add_content_menu_xpath)
+        # hover_add_content = ActionChains(self.driver).move_to_element(add_content_hover)
+        # hover_add_content.perform()
+        #
+        # # Click on hover menu item (Content > Add content > Basic Page)
+        # # self.assertTrue(self.is_element_present(By.XPATH, self.add_basic_page_xpath))
+        # try:
+        #     self.driver.find_element_by_xpath(self.add_basic_page_xpath).click()
+        # except:
+        #     print "Basic page create page not found."
 
         # verify create basic page
         try:
@@ -137,10 +139,12 @@ class CreateContents(unittest.TestCase):
 
     def test_5_ckeditor_body_input(self):
         #Locate the iframes
+        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, self.basic_page_body_xpath)))
         ckeditor_frame = self.driver.find_element_by_xpath(self.basic_page_body_xpath)
         #Switch to frame
         self.driver.switch_to.frame(ckeditor_frame)
         #Send key to Ckeditor Body
+        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, "//body")))
         editor_body = self.driver.find_element_by_xpath("//body")
         editor_body.send_keys("Test Body")
         editor_body.send_keys(Keys.RETURN)
@@ -150,14 +154,21 @@ class CreateContents(unittest.TestCase):
 
     def test_6_ckeditor_image_upload(self):
         global ckfinder
+        global final_browse_button
         if ckfinder is 0:
             # click on the ckeditor image upload button.
             self.driver.find_element_by_xpath(self.ckeditor_image_upload_button_xpath).click()
 
             # wait for the image properties pop-up to appear, then click on the Browse Server button.
             time.sleep(1)
-            WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, self.browse_button_imce_xpath)))
-            self.driver.find_element_by_xpath(self.browse_button_imce_xpath).click()
+            try:
+                WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, self.browse_button_local_xpath)))
+                final_browse_button = self.browse_button_local_xpath
+            except:
+                WebDriverWait(self.driver, 3).until(
+                    EC.presence_of_element_located((By.XPATH, self.browse_button_stevie_xpath)))
+                final_browse_button = self.browse_button_stevie_xpath
+            self.driver.find_element_by_xpath(final_browse_button).click()
 
             # Switch to image upload window
             self.driver.switch_to.window(self.driver.window_handles[1])
@@ -210,10 +221,12 @@ class CreateContents(unittest.TestCase):
 
     def test_7_save_basic_page(self):
         # Click 'Save' to save the Basic Page
+        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, self.save_content_button_xpath)))
         self.driver.find_element_by_xpath(self.save_content_button_xpath).click()
 
         # Verify successful Basic Page creation
         test_page_title_xpath = "//em[contains(text(), 'Test Basic Page')]"
+        WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, test_page_title_xpath)))
         # self.assertTrue(self.is_element_present(By.XPATH, self.success_message_xpath))
         self.assertTrue(self.is_element_present(By.XPATH, test_page_title_xpath))
         print "7. Basic page saved PASS!"
