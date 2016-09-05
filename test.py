@@ -84,10 +84,10 @@ class CreateContents(unittest.TestCase):
         for i in xrange(len(login_button_link_list)):
             try:
                 self.driver.find_element_by_xpath(login_button_link_list[i]).click()
-                print "Some login button found"
+                # print "Some login button found"
                 break
             except:
-                # pass
+                pass
                 print "No login button found"
         # Verify Logout link is present
         try:
@@ -97,7 +97,7 @@ class CreateContents(unittest.TestCase):
             pass
         # assert and halt the test if login is not successful.
         self.assertTrue(self.is_element_present(By.XPATH, self.logout_link_xpath))
-        print "1. User Login test PASS!"
+        # print "1. User Login test PASS!"
         # time.sleep(2)
 
     def test_2_nav_to_basic_create_basic_page(self):
@@ -124,9 +124,10 @@ class CreateContents(unittest.TestCase):
         try:
             WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, self.basic_page_title_xpath)))
         except:
+            pass
             print "Basic Page creating page loading failed."
         # self.assertTrue(self.is_element_present(By.XPATH, self.basic_page_title_xpath))
-        print "2. Navigate to Create Basic page test PASS!"
+        # print "2. Navigate to Create Basic page test PASS!"
 
     def test_3_basic_page_title(self):
         # Enter data in the Basic Page fields
@@ -134,7 +135,7 @@ class CreateContents(unittest.TestCase):
         WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, basic_page_title_field_xpath)))
         self.driver.find_element_by_xpath(basic_page_title_field_xpath).clear()
         self.driver.find_element_by_xpath(basic_page_title_field_xpath).send_keys("Test Basic Page")
-        print "3. Basic page title enter PASS!"
+        # print "3. Basic page title enter PASS!"
 
     def test_4_find_ckfinder_in_page_source(self):
         global ckfinder
@@ -144,7 +145,7 @@ class CreateContents(unittest.TestCase):
             print "4. ckfinder found."
         else:
             ckfinder = 0
-        print "4. IMCE file uploader check PASS!"
+        # print "4. IMCE file uploader check PASS!"
 
     def test_5_ckeditor_body_input(self):
         #Locate the iframes
@@ -159,7 +160,7 @@ class CreateContents(unittest.TestCase):
         editor_body.send_keys(Keys.RETURN)
         # if driver is already inside ckeditor_frame, switch out first
         self.driver.switch_to.default_content()
-        print "5. CKEditor Body input test PASS!"
+        # print "5. CKEditor Body input test PASS!"
 
     def test_6_ckeditor_image_upload(self):
         global ckfinder
@@ -177,8 +178,9 @@ class CreateContents(unittest.TestCase):
                     ckeditor_image_upload_button_xpath = ckeditor_image_upload_button_list[j]
                     break
                 except:
+                    pass
                     print "Unknown CKEditor Image Uplaod button."
-            print ckeditor_image_upload_button_xpath
+            # print ckeditor_image_upload_button_xpath
             # click on the ckeditor image upload button.
             self.driver.find_element_by_xpath(ckeditor_image_upload_button_xpath).click()
 
@@ -189,6 +191,7 @@ class CreateContents(unittest.TestCase):
                     self.driver.find_element_by_xpath("//span[contains(text(), 'Browse Server')]").click()
                     break
                 except:
+                    pass
                     print "Unknown Browse Server button."
             # print final_browse_button
             # except:
@@ -243,7 +246,7 @@ class CreateContents(unittest.TestCase):
             # Click 'OK' button on 'Image Property' pop-up to put the uploaded file into CKEditor body.
             ckeditor_ok_button_xpath = "//span[contains(text(), 'OK')]"
             self.driver.find_element_by_xpath(ckeditor_ok_button_xpath).click()
-            print "6. CKEditor File upload PASS!"
+            # print "6. CKEditor File upload PASS!"
             # time.sleep(3)
 
     def test_7_save_basic_page(self):
@@ -256,18 +259,18 @@ class CreateContents(unittest.TestCase):
         WebDriverWait(self.driver, 10).until(EC.presence_of_element_located((By.XPATH, test_page_title_xpath)))
         # self.assertTrue(self.is_element_present(By.XPATH, self.success_message_xpath))
         self.assertTrue(self.is_element_present(By.XPATH, test_page_title_xpath))
-        print "7. Basic page saved PASS!"
+        # print "7. Basic page saved PASS!"
         time.sleep(1)
 
 
 
-    # @classmethod
-    # def tearDownClass(cls):
-    #     # Close the browser window
-    #     cls.driver.quit()
+    @classmethod
+    def tearDownClass(cls):
+        # Close the browser window
+        cls.driver.quit()
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(verbosity=2)
 
 
 

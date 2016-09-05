@@ -8,4 +8,4 @@ basic_page_create_test = unittest.TestLoader().loadTestsFromTestCase(CreateConte
 smoke_test = unittest.TestSuite(basic_page_create_test)
 
 # run the suite
-unittest.TextTestRunner().run(smoke_test)
+unittest.TextTestRunner(verbosity=2).run(smoke_test)
