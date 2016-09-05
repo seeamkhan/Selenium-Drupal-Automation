@@ -17,15 +17,15 @@ class CreateContents(unittest.TestCase):
     def setUpClass(cls):
         cls.driver = webdriver.Chrome()
         cls.driver.maximize_window()
-        cls.base_url = raw_input("Type the site URL: ")
-        # cls.base_url = "https://stg.stevieawards.com"
-        # cls.base_url = "http://jaxara.dev.lin2.panth.com"
-        # cls.base_url = "http://localhost/drupal7"
-        # cls.base_url = "http://seeam.com/drupal7"
-        # cls.base_url = "http://stg.sie.qioprogram.panth.com"
-        # cls.base_url = "http://googel.com"
+        # cls.base_url = raw_input("Type the site URL: ")
+        # cls.base_url = "https://stg.stevieawards.com/"
+        # cls.base_url = "http://jaxara.dev.lin2.panth.com/"
+        cls.base_url = "http://localhost/drupal7/"
+        # cls.base_url = "http://seeam.com/drupal7/"
+        # cls.base_url = "http://stg.sie.qioprogram.panth.com/"
+        # cls.base_url = "http://googel.com/"
         # cls.base_url = ""
-        cls.driver.get(cls.base_url + "/user")
+        cls.driver.get(cls.base_url + "user")
         # Drupal common xpath:
         cls.content_menu_xpath = "//li[contains(@class, 'admin-menu-toolbar-category expandable')]/a[contains(@href, '/admin/content')]"
         cls.add_content_menu_xpath = "//li[contains(@class, 'admin-menu-toolbar-category expandable')]/ul[contains(@class, 'dropdown')]/li[contains(@class, 'expandable')]/a[contains(@href, '/node/add')]"
@@ -101,7 +101,7 @@ class CreateContents(unittest.TestCase):
         # time.sleep(2)
 
     def test_2_nav_to_basic_create_basic_page(self):
-        self.driver.get(self.base_url + "/node/add/page")
+        self.driver.get(self.base_url + "node/add/page")
         # content_menu_hover = self.driver.find_element_by_xpath(self.content_menu_xpath)
         # try:
         #     WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, self.content_menu_xpath)))
