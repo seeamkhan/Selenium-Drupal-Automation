@@ -20,8 +20,8 @@ class CreateContents(unittest.TestCase):
         # cls.base_url = raw_input("Type the site URL: ")
         # cls.base_url = "https://stg.stevieawards.com/"
         # cls.base_url = "http://jaxara.dev.lin2.panth.com/"
-        cls.base_url = "http://localhost/drupal7/"
-        # cls.base_url = "http://seeam.com/drupal7/"
+        # cls.base_url = "http://localhost/drupal7/"
+        cls.base_url = "http://seeam.com/drupal7/"
         # cls.base_url = "http://stg.sie.qioprogram.panth.com/"
         # cls.base_url = "http://googel.com/"
         # cls.base_url = ""
@@ -34,7 +34,7 @@ class CreateContents(unittest.TestCase):
         cls.pass_field_xpath = "//input[contains(@id, 'edit-pass')]"
         cls.login_button_xpath_bootstrap = "//button[contains(@value, 'Log in')]"
         cls.login_button_xpath_2 = "//input[contains(@value, 'Log in')]"
-        cls.basic_page_title_xpath = "//h1[contains(text(), 'Create*')]"
+        cls.basic_page_title_xpath = "//h1[contains(text(), 'Create Basic Page')]"
         cls.logout_link_xpath = "//a[contains(text(), 'Log out')]"
         cls.basic_page_body_xpath = "//label[contains(text(), 'Body')]//following-sibling::div//iframe"
         cls.ckfinder = 0
