@@ -17,11 +17,11 @@ class CreateContents(unittest.TestCase):
     def setUpClass(cls):
         cls.driver = webdriver.Chrome()
         cls.driver.maximize_window()
-        # cls.base_url = "https://stg.stevieawards.com/"
+        cls.base_url = "https://stg.stevieawards.com/"
         # cls.base_url = "http://jaxara.dev.lin2.panth.com/"
         # cls.base_url = "http://localhost/drupal7/"
         # cls.base_url = "http://seeam.com/drupal7/"
-        cls.base_url = "http://stg.sie.qioprogram.panth.com/"
+        # cls.base_url = "http://stg.sie.qioprogram.panth.com/"
         # cls.base_url = "http://googel.com/"
         cls.driver.get(cls.base_url + "user")
         # Drupal common xpath:
@@ -36,9 +36,12 @@ class CreateContents(unittest.TestCase):
         cls.logout_link_xpath = "//a[contains(text(), 'Log out')]"
         cls.basic_page_body_xpath = "//label[contains(text(), 'Body')]//following-sibling::div//iframe"
         cls.ckfinder = 0
-        # cls.ckeditor_image_upload_button_xpath = "//label[contains(text(),'Body')]//following-sibling::div//a[contains(@class,'cke_button__image')]"
+        cls.ckeditor_image_upload_button_xpath_1 = "//label[contains(text(),'Body')]//following-sibling::div//a[contains(@class,'cke_button_image')]/span[contains(@class,'cke_icon')]"
+        cls.ckeditor_image_upload_button_xpath_2 = "//label[contains(text(),'Body')]//following-sibling::div//a[contains(@class,'cke_button__image')]" #this works for Stevie and local site.
         # cls.ckeditor_image_upload_button_xpath = "//label[contains(text(),'Body')]//following-sibling::div//span[contains(text(), 'Image')]"
-        cls. ckeditor_image_upload_button_xpath = "//label[contains(text(),'Body')]//following-sibling::div//span[contains(@class, 'cke_button__image_icon')]"
+        # cls. ckeditor_image_upload_button_xpath = "//label[contains(text(),'Body')]//following-sibling::div//span[contains(@class, 'cke_button__image_icon')]"
+        cls.ckeditor_image_upload_button_xpath = ""
+        cls.ckeditor_image_upload_button_list = []
         cls.final_browse_button = ""
         cls.browse_buttons_list = []
         cls.browse_button_local_xpath = "//span[contains(@id, 'cke_142_label')]"
@@ -158,16 +161,30 @@ class CreateContents(unittest.TestCase):
         global ckfinder
         global final_browse_button
         global browse_button_list
+        global ckeditor_image_upload_button_list
+        global ckeditor_image_upload_button_xpath
+
         browse_button_list = [self.browse_button_local_xpath, self.browse_button_stevie_xpath, self.browse_button_sie_xpath]
+        ckeditor_image_upload_button_list = [self.ckeditor_image_upload_button_xpath_1, self.ckeditor_image_upload_button_xpath_2]
         if ckfinder is 0:
+            for j in xrange(len(ckeditor_image_upload_button_list)):
+                try:
+                    WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable((By.XPATH, ckeditor_image_upload_button_list[j])))
+                    ckeditor_image_upload_button_xpath = ckeditor_image_upload_button_list[j]
+                    break
+                except:
+                    print "Unknown CKEditor Image Uplaod button."
+            print ckeditor_image_upload_button_xpath
             # click on the ckeditor image upload button.
-            self.driver.find_element_by_xpath(self.ckeditor_image_upload_button_xpath).click()
+            self.driver.find_element_by_xpath(ckeditor_image_upload_button_xpath).click()
 
             # wait for the image properties pop-up to appear, then click on the Browse Server button.
             time.sleep(1)
             for i in xrange(len(browse_button_list)):
                 try:
-                    WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, browse_button_list[i])))
+                    # WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, browse_button_list[i])))
+                    WebDriverWait(self.driver, 3).until(
+                        EC.element_to_be_clickable((By.XPATH, browse_button_list[i])))
                     final_browse_button = browse_button_list[i]
                     break
                 except:
@@ -208,7 +225,7 @@ class CreateContents(unittest.TestCase):
             row_count_int = len(self.driver.find_elements_by_xpath("//table[@id='file-list']/tbody/tr"))
             row_count = str(row_count_int)
             # print row_count
-            last_file_xpath = "//table[@id='file-list']/tbody/tr[" + row_count + "]/td/span"
+            # last_file_xpath = "//table[@id='file-list']/tbody/tr[" + row_count + "]/td/span"
             # print last_file_xpath
 
             # Insert last uploaded file into the 'Image Property' pop-up.
