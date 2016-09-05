@@ -16,16 +16,15 @@ class CreateContents(unittest.TestCase):
     def setUpClass(cls):
         cls.driver = webdriver.Chrome()
         cls.driver.maximize_window()
-
-
-        # cls.base_url = "https://stevieawards.dev.lin2.panth.com/user"
-        cls.base_url = "http://jaxara.dev.lin2.panth.com/user"
-        # cls.base_url = "http://localhost/drupal7/user"
-        # cls.base_url = "http://google.com"
-        # cls.base_url = "http://seeam.com/drupal7/user"
-
-        cls.verificationErrors = []
-        cls.driver.get(cls.base_url)  # Drupal common xpath:
+        # cls.base_url = raw_input("Type the site URL: ")
+        # cls.base_url = "https://stg.stevieawards.com/"
+        # cls.base_url = "http://jaxara.dev.lin2.panth.com/"
+        cls.base_url = "http://localhost/drupal7/"
+        # cls.base_url = "http://seeam.com/drupal7/"
+        # cls.base_url = "http://stg.sie.qioprogram.panth.com/"
+        # cls.base_url = "http://googel.com/"
+        cls.driver.get(cls.base_url + "user")
+        # Drupal common xpath:
         cls.content_menu_xpath = "//li[contains(@class, 'admin-menu-toolbar-category expandable')]/a[contains(@href, '/admin/content')]"
         cls.add_content_menu_xpath = "//li[contains(@class, 'admin-menu-toolbar-category expandable')]/ul[contains(@class, 'dropdown')]/li[contains(@class, 'expandable')]/a[contains(@href, '/node/add')]"
         cls.add_basic_page_xpath = "//ul[contains(@id, 'admin-menu-menu')]/li[2]/ul/li[1]/ul/li[2]/a"
@@ -33,11 +32,24 @@ class CreateContents(unittest.TestCase):
         cls.pass_field_xpath = "//input[contains(@id, 'edit-pass')]"
         cls.login_button_xpath_bootstrap = "//button[contains(@value, 'Log in')]"
         cls.login_button_xpath_2 = "//input[contains(@value, 'Log in')]"
-        cls.basic_page_title_xpath = "//h1[contains(text(), 'Create Basic page')]"
+        cls.basic_page_title_xpath = "//h1[contains(text(), 'Create*')]"
         cls.logout_link_xpath = "//a[contains(text(), 'Log out')]"
-        cls.basic_page_body_xpath_imce_1 = "//div[contains(@id, 'cke_1_contents')]/iframe"
-        cls.basic_page_body_xpath_imce_2 = "//div[contains(@id, 'cke_2_contents')]/iframe"
-        cls.basic_page_body_xpath_ckfinder = "//td[contains(@id, 'cke_contents_edit-body-und-0-value')]/iframe"
+        cls.basic_page_body_xpath = "//label[contains(text(), 'Body')]//following-sibling::div//iframe"
+        cls.ckfinder = 0
+        cls.ckeditor_image_upload_button_xpath_1 = "//label[contains(text(),'Body')]//following-sibling::div//a[contains(@class,'cke_button_image')]/span[contains(@class,'cke_icon')]"
+        cls.ckeditor_image_upload_button_xpath_2 = "//label[contains(text(),'Body')]//following-sibling::div//a[contains(@class,'cke_button__image')]"  # this works for Stevie and local site.
+        # cls.ckeditor_image_upload_button_xpath = "//label[contains(text(),'Body')]//following-sibling::div//span[contains(text(), 'Image')]"
+        # cls. ckeditor_image_upload_button_xpath = "//label[contains(text(),'Body')]//following-sibling::div//span[contains(@class, 'cke_button__image_icon')]"
+        cls.ckeditor_image_upload_button_xpath = ""
+        cls.ckeditor_image_upload_button_list = []
+        cls.final_browse_button = ""
+        cls.browse_buttons_list = []
+        # Add the browse button xpath for the target site.
+        cls.browse_button_local_xpath = "//span[contains(@id, 'cke_142_label')]"
+        cls.browse_button_stevie_xpath = "//span[contains(@id, 'cke_108_label')]"
+        cls.browse_button_sie_xpath = "//span[contains(@id, 'cke_171_label')]"
+        cls.browse_button_cbb_xpath = "//span[contains(@id, 'cke_144_label')]"
+        cls.save_content_button_xpath = "//input[contains(@value, 'Save')]"
 
 # Enable this to get username and password from credential file
     credentials_file = os.path.join(os.path.dirname(__file__), 'login.credentials')
@@ -87,12 +99,46 @@ class CreateContents(unittest.TestCase):
         self.assertTrue(self.is_element_present(By.XPATH, self.logout_link_xpath))
         print "1. User Login test PASS!"
         time.sleep(2)
+        self.driver.get(self.base_url + "node/add/page")
+
+    def test_2_image_upload(self):
+        global ckfinder
+        # global final_browse_button
+        # global browse_button_list
+        global ckeditor_image_upload_button_list
+        global ckeditor_image_upload_button_xpath
+
+        ckeditor_image_upload_button_list = [self.ckeditor_image_upload_button_xpath_1,
+                                             self.ckeditor_image_upload_button_xpath_2]
+        if self.ckfinder is 0:
+            for j in xrange(len(ckeditor_image_upload_button_list)):
+                try:
+                    WebDriverWait(self.driver, 3).until(
+                        EC.element_to_be_clickable((By.XPATH, ckeditor_image_upload_button_list[j])))
+                    ckeditor_image_upload_button_xpath = ckeditor_image_upload_button_list[j]
+                    break
+                except:
+                    print "Unknown CKEditor Image Uplaod button."
+            print ckeditor_image_upload_button_xpath
+            # click on the ckeditor image upload button.
+            self.driver.find_element_by_xpath(ckeditor_image_upload_button_xpath).click()
+            # wait for the image properties pop-up to appear, then click on the Browse Server button.
+            time.sleep(1)
+
+            for k in xrange(6):
+                try:
+                    self.driver.find_element_by_xpath("//span[contains(text(), 'Browse Server')]").click()
+                    break
+                except:
+                    print "Unknown Browse Server button."
+            # print test_browse_button
 
 
-    @classmethod
-    def tearDownClass(cls):
-        # Close the browser window
-        cls.driver.quit()
+
+    # @classmethod
+    # def tearDownClass(cls):
+    #     # Close the browser window
+    #     cls.driver.quit()
 
 if __name__ == '__main__':
     unittest.main()
